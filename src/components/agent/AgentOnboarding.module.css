@@ -1,0 +1,135 @@
+.wrapper {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--charcoal-gradient);
+  padding: var(--space-5);
+}
+
+.card {
+  width: 100%;
+  max-width: 520px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: var(--glass-blur);
+  border-radius: var(--radius-xl);
+  padding: var(--space-10) var(--space-8);
+  animation: scaleIn var(--duration-slow) var(--ease-out);
+}
+
+.progressBar {
+  height: 3px;
+  background: rgba(200, 169, 110, 0.15);
+  border-radius: var(--radius-pill);
+  margin-bottom: var(--space-6);
+  overflow: hidden;
+}
+
+.progressFill {
+  height: 100%;
+  background: var(--gold-gradient);
+  border-radius: var(--radius-pill);
+  transition: width var(--duration-slow) var(--ease-out);
+}
+
+.stepCounter {
+  font-size: var(--text-xs);
+  font-weight: 600;
+  letter-spacing: var(--tracking-wider);
+  text-transform: uppercase;
+  color: var(--gold-primary);
+  display: block;
+  margin-bottom: var(--space-4);
+}
+
+.question {
+  font-family: var(--font-display);
+  font-size: var(--text-2xl);
+  font-weight: 600;
+  color: var(--cream);
+  margin-bottom: var(--space-6);
+  line-height: var(--leading-snug);
+}
+
+.inputArea {
+  margin-bottom: var(--space-8);
+}
+
+/* override Input styles for dark bg */
+.inputArea input {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(200, 169, 110, 0.2);
+  color: var(--cream);
+}
+
+.inputArea input::placeholder {
+  color: rgba(250, 248, 245, 0.35);
+}
+
+.inputArea input:focus {
+  border-color: var(--gold-primary);
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.inputArea label {
+  color: rgba(250, 248, 245, 0.65);
+}
+
+.physicalGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-4);
+}
+
+.options {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.option {
+  width: 100%;
+  text-align: left;
+  padding: var(--space-4) var(--space-5);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1.5px solid rgba(200, 169, 110, 0.15);
+  border-radius: var(--radius-md);
+  color: rgba(250, 248, 245, 0.75);
+  font-size: var(--text-sm);
+  font-family: var(--font-body);
+  cursor: pointer;
+  transition: all var(--duration-fast) var(--ease-out);
+}
+
+.option:hover {
+  background: rgba(200, 169, 110, 0.1);
+  border-color: rgba(200, 169, 110, 0.4);
+  color: var(--cream);
+}
+
+.selected {
+  background: rgba(200, 169, 110, 0.15);
+  border-color: var(--gold-primary);
+  color: var(--gold-light);
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-3);
+}
+
+.nextBtn {
+  min-width: 160px;
+}
+
+@media (max-width: 480px) {
+  .physicalGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .card {
+    padding: var(--space-6) var(--space-5);
+  }
+}

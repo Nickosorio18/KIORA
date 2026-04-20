@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1200">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    width: 1200px;
+    height: 630px;
+    overflow: hidden;
+    background: #1A1A2E;
+    font-family: 'Jost', system-ui, sans-serif;
+  }
+
+  .canvas {
+    width: 1200px;
+    height: 630px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  /* Background layers */
+  .bg-gradient {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 700px 500px at 15% 50%, rgba(200,169,110,0.07) 0%, transparent 70%),
+      radial-gradient(ellipse 400px 400px at 85% 20%, rgba(200,169,110,0.05) 0%, transparent 60%),
+      linear-gradient(135deg, #1A1A2E 0%, #2D2D44 50%, #1A1A2E 100%);
+  }
+
+  /* Decorative circles */
+  .circle-1 {
+    position: absolute;
+    width: 520px;
+    height: 520px;
+    border-radius: 50%;
+    border: 1px solid rgba(200,169,110,0.08);
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+  .circle-2 {
+    position: absolute;
+    width: 720px;
+    height: 720px;
+    border-radius: 50%;
+    border: 1px solid rgba(200,169,110,0.04);
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  /* Horizontal accent lines */
+  .line-top {
+    position: absolute;
+    top: 48px;
+    left: 80px;
+    right: 80px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(200,169,110,0.3), transparent);
+  }
+  .line-bottom {
+    position: absolute;
+    bottom: 48px;
+    left: 80px;
+    right: 80px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(200,169,110,0.3), transparent);
+  }
+
+  /* Corner accents */
+  .corner {
+    position: absolute;
+    width: 32px;
+    height: 32px;
+  }
+  .corner-tl { top: 36px; left: 68px; border-top: 1.5px solid rgba(200,169,110,0.5); border-left: 1.5px solid rgba(200,169,110,0.5); }
+  .corner-tr { top: 36px; right: 68px; border-top: 1.5px solid rgba(200,169,110,0.5); border-right: 1.5px solid rgba(200,169,110,0.5); }
+  .corner-bl { bottom: 36px; left: 68px; border-bottom: 1.5px solid rgba(200,169,110,0.5); border-left: 1.5px solid rgba(200,169,110,0.5); }
+  .corner-br { bottom: 36px; right: 68px; border-bottom: 1.5px solid rgba(200,169,110,0.5); border-right: 1.5px solid rgba(200,169,110,0.5); }
+
+  /* Side gold bar */
+  .side-bar {
+    position: absolute;
+    left: 80px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 3px;
+    height: 120px;
+    background: linear-gradient(180deg, transparent, #C8A96E, transparent);
+    border-radius: 2px;
+  }
+
+  /* Main content */
+  .content {
+    position: relative;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 0;
+  }
+
+  .eyebrow {
+    font-family: 'Jost', sans-serif;
+    font-size: 13px;
+    font-weight: 400;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: #C8A96E;
+    margin-bottom: 28px;
+    opacity: 0.85;
+  }
+
+  .logo {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 112px;
+    font-weight: 600;
+    color: #FAF8F5;
+    letter-spacing: 0.05em;
+    line-height: 1;
+    margin-bottom: 0;
+  }
+
+  .logo .macron {
+    color: #C8A96E;
+  }
+
+  .divider {
+    width: 80px;
+    height: 1.5px;
+    background: linear-gradient(90deg, transparent, #C8A96E, transparent);
+    margin: 28px auto;
+  }
+
+  .tagline {
+    font-family: 'Jost', sans-serif;
+    font-size: 22px;
+    font-weight: 300;
+    color: rgba(250,248,245,0.7);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .tagline em {
+    font-style: normal;
+    color: #E8D5A3;
+    font-weight: 400;
+  }
+
+  /* Bottom badge */
+  .badge {
+    position: absolute;
+    bottom: 70px;
+    right: 80px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .badge-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #C8A96E;
+  }
+
+  .badge-text {
+    font-family: 'Jost', sans-serif;
+    font-size: 12px;
+    font-weight: 400;
+    color: rgba(200,169,110,0.6);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+  }
+
+  /* Floating particles */
+  .particle {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(200,169,110,0.15);
+  }
+  .p1 { width: 4px; height: 4px; top: 120px; left: 200px; }
+  .p2 { width: 3px; height: 3px; top: 80px; right: 300px; background: rgba(200,169,110,0.1); }
+  .p3 { width: 5px; height: 5px; bottom: 150px; left: 350px; background: rgba(200,169,110,0.08); }
+  .p4 { width: 3px; height: 3px; bottom: 100px; right: 250px; }
+  .p5 { width: 4px; height: 4px; top: 200px; right: 180px; background: rgba(200,169,110,0.12); }
+</style>
+</head>
+<body>
+  <div class="canvas">
+    <div class="bg-gradient"></div>
+    <div class="circle-1"></div>
+    <div class="circle-2"></div>
+    <div class="line-top"></div>
+    <div class="line-bottom"></div>
+    <div class="corner corner-tl"></div>
+    <div class="corner corner-tr"></div>
+    <div class="corner corner-bl"></div>
+    <div class="corner corner-br"></div>
+    <div class="side-bar"></div>
+    <div class="particle p1"></div>
+    <div class="particle p2"></div>
+    <div class="particle p3"></div>
+    <div class="particle p4"></div>
+    <div class="particle p5"></div>
+
+    <div class="content">
+      <div class="eyebrow">Nutrición · Bienestar · IA</div>
+      <div class="logo">KY<span class="macron">Ō</span>RA</div>
+      <div class="divider"></div>
+      <div class="tagline">Nutrición <em>Inteligente</em>, Vida Extraordinaria</div>
+    </div>
+
+    <div class="badge">
+      <div class="badge-dot"></div>
+      <div class="badge-text">kyorahealth.com</div>
+    </div>
+  </div>
+</body>
+</html>

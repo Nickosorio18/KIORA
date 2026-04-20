@@ -1,0 +1,11 @@
+User-agent: *
+Allow: /
+Disallow: /app/dashboard
+Disallow: /app/agent
+Disallow: /app/pantry
+Disallow: /app/plan
+Disallow: /app/progress
+Disallow: /app/onboarding
+Disallow: /auth/
+
+Sitemap: https://kyorahealth.com/sitemap.xml
