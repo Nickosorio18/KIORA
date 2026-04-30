@@ -145,6 +145,21 @@ const layoutCss = `
 .logout-btn-confirm{padding:.65rem 1.5rem;background:var(--red-soft);border:none;border-radius:3px;font-family:var(--font-b);font-size:.72rem;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:var(--white);cursor:pointer;transition:all .2s}
 .logout-btn-confirm:hover{background:#B85C5C;transform:translateY(-1px)}
 
+/* ═══ MOBILE HEADER ═══ */
+.m-header{display:none;position:sticky;top:0;z-index:50;background:var(--charcoal);border-bottom:1px solid rgba(200,169,110,.08);height:54px;flex-shrink:0;align-items:center;justify-content:space-between;padding:0 1.1rem}
+.m-logo{font-family:var(--font-d);font-size:1.1rem;font-weight:500;letter-spacing:.3em;color:var(--white);text-decoration:none}
+.m-logo .ac{color:var(--gold);font-weight:700}
+.m-avatar{width:34px;height:34px;border-radius:50%;background:var(--gold);display:flex;align-items:center;justify-content:center;font-size:.8rem;font-weight:600;color:var(--charcoal);cursor:pointer;border:none;flex-shrink:0;transition:opacity .2s}
+.m-avatar:hover{opacity:.85}
+
+/* ═══ BOTTOM NAV ═══ */
+.bottom-nav{display:none;position:fixed;bottom:0;left:0;right:0;background:var(--charcoal);border-top:1px solid rgba(200,169,110,.1);z-index:50;height:62px;align-items:stretch}
+.bn-item{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.2rem;background:none;border:none;color:rgba(255,255,255,.35);cursor:pointer;padding:.3rem 0;font-family:var(--font-b);transition:color .2s;-webkit-tap-highlight-color:transparent}
+.bn-item.active{color:var(--gold)}
+.bn-item.active svg{opacity:1}
+.bn-item svg{opacity:.7;transition:opacity .2s}
+.bn-label{font-size:.42rem;letter-spacing:.1em;text-transform:uppercase;font-weight:400;line-height:1}
+
 /* ═══ RESPONSIVE ═══ */
 @media(max-width:900px){
   .side{width:60px;padding:1rem 0}
@@ -157,6 +172,12 @@ const layoutCss = `
   .side-soon-badge{display:none}
   .side-plan,.side-profile-info{display:none}
   .side-profile{justify-content:center;padding:.8rem 0}
+}
+@media(max-width:600px){
+  .side{display:none !important}
+  .m-header{display:flex}
+  .bottom-nav{display:flex}
+  .layout-main{padding-bottom:62px}
 }
 `;
 
@@ -377,8 +398,31 @@ export default function DashboardLayout({ children }) {
 
         {/* ═══ Main Content (children) ═══ */}
         <div className="layout-main">
+          {/* Mobile top header — visible only on ≤600px */}
+          <header className="m-header">
+            <Link to="/" className="m-logo">KY<span className="ac">Ō</span>RA</Link>
+            <button className="m-avatar" onClick={() => navigate("/app/cuenta")} title="Mi cuenta">
+              {(USER.nombre?.[0] || "?").toUpperCase()}
+            </button>
+          </header>
           {children}
         </div>
+
+        {/* ═══ Bottom Nav — visible only on ≤600px ═══ */}
+        <nav className="bottom-nav" aria-label="Navegación principal">
+          {NAV_ITEMS.map(n => (
+            <button
+              key={n.id}
+              className={`bn-item${activeNav === n.id ? " active" : ""}`}
+              onClick={() => navigate(n.path)}
+              aria-label={n.label}
+              aria-current={activeNav === n.id ? "page" : undefined}
+            >
+              {ICONS[n.id]}
+              <span className="bn-label">{n.label}</span>
+            </button>
+          ))}
+        </nav>
 
         {/* ═══ Logout Confirmation Modal ═══ */}
         {showLogout && (

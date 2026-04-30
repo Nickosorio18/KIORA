@@ -231,6 +231,10 @@ const css = `
 }
 .dash-header { animation: headerIn .5s cubic-bezier(.22,1,.36,1) both; animation-delay: .02s; }
 
+/* Modal grids — responsive */
+.modal-grid-2{display:grid;grid-template-columns:1fr 1fr;gap:.8rem}
+.modal-grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:.8rem}
+
 /* ═══ RESPONSIVE ═══ */
 @media(max-width:1200px){
   .dash-grid{grid-template-columns:1fr 1fr}
@@ -244,6 +248,10 @@ const css = `
 }
 @media(max-width:600px){
   .stats-row{grid-template-columns:1fr 1fr}
+  .dash-main{padding:1rem}
+  .modal-grid-2,.modal-grid-3{grid-template-columns:1fr}
+  .right-col{flex-direction:column!important}
+  .right-col>*{min-width:0!important;flex:none!important;width:100%}
 }
 @media(max-width:400px){
   .stats-row{grid-template-columns:1fr}
@@ -734,7 +742,7 @@ export default function KyoraDashboard() {
                 Hora
                 <input type="time" value={mealForm.time} onChange={(e) => setMealForm((f) => ({ ...f, time: e.target.value }))} />
               </label>
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: ".8rem" }}>
+              <div className="modal-grid-2">
                 <label className="modal-label">
                   Calorías (kcal)
                   <input type="number" min="0" placeholder="420" value={mealForm.calories} onChange={(e) => setMealForm((f) => ({ ...f, calories: e.target.value }))} />
@@ -766,7 +774,7 @@ export default function KyoraDashboard() {
                 Ejercicio
                 <input type="text" placeholder="Ej. Press de banca, Sentadillas, Correr" value={exForm.name} onChange={(e) => setExForm((f) => ({ ...f, name: e.target.value }))} autoFocus />
               </label>
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: ".8rem" }}>
+              <div className="modal-grid-2">
                 <label className="modal-label">
                   Tipo
                   <select value={exForm.type} onChange={(e) => setExForm((f) => ({ ...f, type: e.target.value }))}>
@@ -781,7 +789,7 @@ export default function KyoraDashboard() {
                 </label>
               </div>
               {!isCardioType && (
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: ".8rem" }}>
+                <div className="modal-grid-3">
                   <label className="modal-label">
                     Series
                     <input type="number" min="0" placeholder="4" value={exForm.sets} onChange={(e) => setExForm((f) => ({ ...f, sets: e.target.value }))} />

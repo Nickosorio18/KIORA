@@ -484,6 +484,23 @@ const styles = `
   .k-suggestions{grid-template-columns:1fr}
 }
 
+/* ── Mobile overrides (≤600px) ── */
+@media(max-width:600px){
+  .k-head{padding:10px 14px}
+  .k-logo{font-size:0;letter-spacing:0}
+  .k-logo .ac{font-size:0}
+  .k-badge{display:none}
+  .k-msgs{padding:12px}
+  .msg{max-width:90%}
+  .k-input{padding:10px 12px 12px}
+  .k-qas{grid-template-columns:1fr}
+  .k-suggestions{grid-template-columns:1fr}
+  .k-toast{bottom:86px}
+  .k-toast.visible{bottom:86px}
+  .k-panel{width:100%;max-width:100%;border-left:none;border-top:1px solid var(--border)}
+  .msg-bbl{padding:11px 14px;font-size:13.5px}
+}
+
 /* ── Meal Action Card (agent → dashboard) ── */
 .meal-action-card {
   margin-top:8px;background:white;border:1.5px solid rgba(200,169,110,.25);border-radius:var(--radius-sm);
