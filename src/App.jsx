@@ -18,6 +18,7 @@ import CuentaPage from '@components/dashboard/CuentaPage'
 import SubscriptionSuccess from '@components/dashboard/SubscriptionSuccess'
 import LoginPage from '@components/auth/LoginPage'
 import AuthCallback from '@components/auth/AuthCallback'
+import UpdatePasswordPage from '@components/auth/UpdatePasswordPage'
 import LandingPage from '@components/landing/LandingPage'
 
 /**
@@ -75,6 +76,7 @@ function App() {
                 <Route path="/" element={<LandingPage />} />
                 <Route path="/app/login" element={<LoginPage />} />
                 <Route path="/auth/callback" element={<AuthCallback />} />
+                <Route path="/auth/update-password" element={<UpdatePasswordPage />} />
 
                 {/* Protected — without sidebar */}
                 <Route path="/app/onboarding" element={<ProtectedRoute><KyoraOnboarding /></ProtectedRoute>} />

@@ -72,8 +72,9 @@ export function AuthProvider({ children }) {
    * @returns {{ error: Error|null }}
    */
   async function resetPassword(email) {
+    const siteUrl = import.meta.env.VITE_SITE_URL || window.location.origin;
     const { error } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: `${window.location.origin}/app/dashboard`,
+      redirectTo: `${siteUrl}/auth/callback`,
     });
     return { error };
   }

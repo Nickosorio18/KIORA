@@ -4,7 +4,8 @@ import { supabase } from "@api/supabaseClient";
 
 /* ═══════════════════════════════════════════════════════
    KYŌRA — Auth Callback
-   Procesa tokens de confirmación de email y OAuth.
+   Procesa tokens de confirmación de email, OAuth y
+   recuperación de contraseña.
    Supabase redirige aquí después de verificar el correo.
    ═══════════════════════════════════════════════════════ */
 
@@ -13,43 +14,49 @@ export default function AuthCallback() {
   const [status, setStatus] = useState("Verificando tu cuenta...");
 
   useEffect(() => {
-    async function handleCallback() {
+    let redirected = false;
+
+    // onAuthStateChange detecta PASSWORD_RECOVERY vs SIGNED_IN
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      if (redirected) return;
+
+      if (event === "PASSWORD_RECOVERY") {
+        redirected = true;
+        setStatus("Redirigiendo para cambiar tu contraseña...");
+        navigate("/auth/update-password");
+        return;
+      }
+
+      if ((event === "SIGNED_IN" || event === "INITIAL_SESSION") && session) {
+        redirected = true;
+        setStatus("¡Cuenta verificada! Bienvenido a KYŌRA. Redirigiendo...");
+        setTimeout(() => navigate("/app/onboarding"), 3500);
+      }
+    });
+
+    // Fallback: si después de 5s no disparó ningún evento, revisar sesión manualmente
+    const timeout = setTimeout(async () => {
+      if (redirected) return;
+      redirected = true;
       try {
-        // Supabase detecta automáticamente los tokens del URL hash/query
-        // gracias a detectSessionInUrl: true en el client.
-        // Solo necesitamos esperar a que se resuelva la sesión.
-        const { data: { session }, error } = await supabase.auth.getSession();
-
-        if (error) {
-          setStatus("Hubo un error al verificar tu cuenta. Intenta iniciar sesión.");
-          setTimeout(() => navigate("/app/login"), 3000);
-          return;
-        }
-
+        const { data: { session } } = await supabase.auth.getSession();
         if (session) {
           setStatus("¡Cuenta verificada! Bienvenido a KYŌRA. Redirigiendo...");
           setTimeout(() => navigate("/app/onboarding"), 3500);
         } else {
-          // Puede que el token aún esté procesándose
-          // Esperamos un momento y reintentamos
-          setTimeout(async () => {
-            const { data: { session: s2 } } = await supabase.auth.getSession();
-            if (s2) {
-              setStatus("¡Cuenta verificada! Bienvenido a KYŌRA. Redirigiendo...");
-              setTimeout(() => navigate("/app/onboarding"), 3500);
-            } else {
-              setStatus("Verificación completa. Inicia sesión para continuar.");
-              setTimeout(() => navigate("/app/login"), 3500);
-            }
-          }, 1500);
+          setStatus("Verificación completa. Inicia sesión para continuar.");
+          setTimeout(() => navigate("/app/login"), 3500);
         }
       } catch {
         setStatus("Error inesperado. Redirigiendo al login...");
         setTimeout(() => navigate("/app/login"), 2000);
       }
-    }
+    }, 5000);
 
-    handleCallback();
+    return () => {
+      subscription.unsubscribe();
+      clearTimeout(timeout);
+    };
   }, [navigate]);
 
   return (
