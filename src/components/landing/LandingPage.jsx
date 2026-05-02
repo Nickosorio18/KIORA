@@ -331,9 +331,9 @@ export default function LandingPage() {
                 <span className="hero-label-line" />
               </div>
               <h1>Nutrición que<br /><em>entiende quién eres</em></h1>
-              <p className="hero-sub">Tu agente de IA crea planes de nutrición y ejercicio adaptados a tu perfil real — y los ajusta cada semana según cómo avanza tu cuerpo.</p>
+              <p className="hero-sub">Tu agente de IA diseña tu plan de nutrición y ejercicio según quién eres — y lo ajusta cada semana con lo que vas aprendiendo de tu cuerpo.</p>
               <div className="hero-ctas">
-                <Link to="/app/login" className="btn-hp">Empezar gratis · 7 días</Link>
+                <Link to="/app/login" className="btn-hp">Empezar 7 días gratis</Link>
                 <a href="#method" className="btn-hg">Ver cómo funciona</a>
               </div>
             </div>
@@ -381,8 +381,7 @@ export default function LandingPage() {
         <div className="lp-stats reveal">
           <div className="lp-stat"><div className="lp-stat-num">24/7</div><div className="lp-stat-label">Tu coach, siempre disponible</div></div>
           <div className="lp-stat"><div className="lp-stat-num">&lt;2min</div><div className="lp-stat-label">De tu perfil a tu primer plan</div></div>
-          <div className="lp-stat"><div className="lp-stat-num">7 días</div><div className="lp-stat-label">De prueba gratis — cancela y no pagas</div></div>
-          <div className="lp-stat"><div className="lp-stat-num">$0</div><div className="lp-stat-label">Cobrado si cancelas antes del día 8</div></div>
+          <div className="lp-stat"><div className="lp-stat-num">7 días</div><div className="lp-stat-label">Prueba gratis — cancela cuando quieras</div></div>
         </div>
 
         {/* ── FEATURES ── */}
@@ -390,7 +389,7 @@ export default function LandingPage() {
           <div className="features-header">
             <div className="section-label reveal">Lo que KYŌRA hace por ti</div>
             <h2 className="section-title reveal">Tres cosas que ninguna app<br />de dieta <em>hace</em></h2>
-            <p className="section-desc reveal">Un agente que conoce tu cocina, calcula tus macros y se ajusta cuando tu cuerpo avanza. Todo sin que tengas que pensar demasiado.</p>
+            <p className="section-desc reveal">Un agente que conoce tu cocina, calcula tus macros y se adapta a cómo avanza tu cuerpo. Tú haces el trabajo real — él hace el resto.</p>
           </div>
           <div className="features-grid">
             <div className="feat-card reveal">
@@ -414,8 +413,8 @@ export default function LandingPage() {
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
               </div>
               <h3>Tu agente no te pierde de vista</h3>
-              <p>Tu agente de IA monitorea tu progreso 24/7 y ajusta tu plan para que cada semana sea mejor que la anterior.</p>
-              <ul className="feat-list"><li>Dashboard personal de progreso</li><li>Check-ins semanales con tu agente</li><li>Alertas inteligentes y motivación</li><li>Reportes mensuales detallados</li></ul>
+              <p>Tu agente sigue tu avance de cerca y ajusta el plan cada semana para que nunca te estanques.</p>
+              <ul className="feat-list"><li>Panel personal de progreso</li><li>Seguimiento semanal con tu agente</li><li>Recordatorios y mensajes de apoyo</li><li>Resumen mensual de tu avance</li></ul>
             </div>
           </div>
         </section>
