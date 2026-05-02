@@ -463,6 +463,9 @@ export default function LoginPage() {
       return;
     }
 
+    // Store remember preference before signIn so custom storage uses correct backend
+    localStorage.setItem('kyora_remember', remember ? 'true' : 'false');
+
     // Login
     const { error: err } = await signIn(email, password);
     setLoading(false);

@@ -149,8 +149,10 @@ const layoutCss = `
 .m-header{display:none;position:sticky;top:0;z-index:50;background:var(--charcoal);border-bottom:1px solid rgba(200,169,110,.08);height:54px;flex-shrink:0;align-items:center;justify-content:space-between;padding:0 1.1rem}
 .m-logo{font-family:var(--font-d);font-size:1.1rem;font-weight:500;letter-spacing:.3em;color:var(--white);text-decoration:none}
 .m-logo .ac{color:var(--gold);font-weight:700}
+.m-avatar-wrap{position:relative;flex-shrink:0}
 .m-avatar{width:34px;height:34px;border-radius:50%;background:var(--gold);display:flex;align-items:center;justify-content:center;font-size:.8rem;font-weight:600;color:var(--charcoal);cursor:pointer;border:none;flex-shrink:0;transition:opacity .2s}
 .m-avatar:hover{opacity:.85}
+.avatar-menu-mobile{bottom:auto;top:calc(100% + 8px);left:auto;right:0;width:240px;max-height:80vh;overflow-y:auto}
 
 /* ═══ BOTTOM NAV ═══ */
 .bottom-nav{display:none;position:fixed;bottom:0;left:0;right:0;background:var(--charcoal);border-top:1px solid rgba(200,169,110,.1);z-index:50;height:62px;align-items:stretch}
@@ -191,12 +193,15 @@ export default function DashboardLayout({ children }) {
   const [showLogout, setShowLogout] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef(null);
+  const mobileMenuRef = useRef(null);
 
   // Click-outside + Esc cierran el dropdown del avatar
   useEffect(() => {
     if (!menuOpen) return;
     const onClick = (e) => {
-      if (menuRef.current && !menuRef.current.contains(e.target)) setMenuOpen(false);
+      const inDesktop = menuRef.current && menuRef.current.contains(e.target);
+      const inMobile = mobileMenuRef.current && mobileMenuRef.current.contains(e.target);
+      if (!inDesktop && !inMobile) setMenuOpen(false);
     };
     const onKey = (e) => { if (e.key === "Escape") setMenuOpen(false); };
     document.addEventListener("mousedown", onClick);
@@ -401,9 +406,38 @@ export default function DashboardLayout({ children }) {
           {/* Mobile top header — visible only on ≤600px */}
           <header className="m-header">
             <Link to="/" className="m-logo">KY<span className="ac">Ō</span>RA</Link>
-            <button className="m-avatar" onClick={() => navigate("/app/cuenta")} title="Mi cuenta">
-              {(USER.nombre?.[0] || "?").toUpperCase()}
-            </button>
+            <div className="m-avatar-wrap" ref={mobileMenuRef}>
+              {menuOpen && (
+                <div className="avatar-menu avatar-menu-mobile" role="menu">
+                  <div className="avatar-menu-head">
+                    <div className="avatar-menu-head-name">{USER.nombre}</div>
+                    <div className="avatar-menu-head-plan">Plan {USER.planLabel} · Día {USER.diasActivo}</div>
+                  </div>
+                  <button className="avatar-menu-item" role="menuitem" onClick={() => { setMenuOpen(false); navigate("/app/cuenta"); }}>
+                    <span className="avatar-menu-item-icon">{ICONS.user}</span>
+                    Mi cuenta
+                  </button>
+                  <button className="avatar-menu-item" role="menuitem" onClick={() => { setMenuOpen(false); navigate("/#pricing"); }}>
+                    <span className="avatar-menu-item-icon">{ICONS.card}</span>
+                    Plan y facturación
+                  </button>
+                  <div className="avatar-menu-sep" />
+                  <button className="avatar-menu-item danger" role="menuitem" onClick={() => { setMenuOpen(false); setShowLogout(true); }}>
+                    <span className="avatar-menu-item-icon">{ICONS.logout}</span>
+                    Cerrar sesión
+                  </button>
+                </div>
+              )}
+              <button
+                className="m-avatar"
+                onClick={() => setMenuOpen((o) => !o)}
+                aria-expanded={menuOpen}
+                aria-haspopup="menu"
+                title="Opciones de cuenta"
+              >
+                {(USER.nombre?.[0] || "?").toUpperCase()}
+              </button>
+            </div>
           </header>
           {children}
         </div>

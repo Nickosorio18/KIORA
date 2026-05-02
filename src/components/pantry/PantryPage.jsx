@@ -142,6 +142,7 @@ const css = `
   .pnt-grid { grid-template-columns:1fr; }
   .pnt-title { font-size:1.7rem; }
   .pnt-strip { flex-direction:column;align-items:flex-start; }
+  .pnt-add-input { font-size:16px; }
 }
 `
 
