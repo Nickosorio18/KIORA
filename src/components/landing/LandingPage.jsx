@@ -1,5 +1,9 @@
 import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
+import { PLANS } from "@/config/plans";
+
+// Extrae el número de priceLocal.MX: "$499 MXN" → "499"
+const mxNum = (plan) => plan.priceLocal.MX.match(/\$([\d,]+)/)?.[1] ?? plan.priceUSD;
 
 const css = `
 :root{--gold:#C8A96E;--gold-light:#E8D5A3;--gold-pale:#F0E6D3;--gold-glow:rgba(200,169,110,.12);--cream:#FAF8F5;--cream-dark:#F2EDE5;--charcoal:#1A1A1E;--charcoal-soft:#2A2A30;--text-dark:#1A1A2E;--text-muted:#6B6B80;--text-light:#9A9189;--white:#FFF;--green:#7A9E7E;--green-light:#EDF3EE;--font-display:'Playfair Display',Georgia,serif;--font-body:'Jost',system-ui,sans-serif}
@@ -377,8 +381,8 @@ export default function LandingPage() {
         <div className="lp-stats reveal">
           <div className="lp-stat"><div className="lp-stat-num">24/7</div><div className="lp-stat-label">Tu coach, siempre disponible</div></div>
           <div className="lp-stat"><div className="lp-stat-num">&lt;2min</div><div className="lp-stat-label">De tu perfil a tu primer plan</div></div>
-          <div className="lp-stat"><div className="lp-stat-num">7 días</div><div className="lp-stat-label">Gratis, sin tarjeta de crédito</div></div>
-          <div className="lp-stat"><div className="lp-stat-num">$0</div><div className="lp-stat-label">Para empezar hoy mismo</div></div>
+          <div className="lp-stat"><div className="lp-stat-num">7 días</div><div className="lp-stat-label">De prueba gratis — cancela y no pagas</div></div>
+          <div className="lp-stat"><div className="lp-stat-num">$0</div><div className="lp-stat-label">Cobrado si cancelas antes del día 8</div></div>
         </div>
 
         {/* ── FEATURES ── */}
@@ -501,13 +505,13 @@ export default function LandingPage() {
           <div className="pricing-header">
             <div className="section-label reveal">Planes</div>
             <h2 className="section-title reveal">Una inversión en ti.<br /><em>Que se nota desde el día uno.</em></h2>
-            <p className="section-desc reveal">7 días gratis para empezar. Después, desde $29/mes. Sin compromisos.</p>
+            <p className="section-desc reveal">7 días de prueba para empezar. Después, desde $499 MXN/mes. Cancela cuando quieras.</p>
           </div>
           {/* Trial Banner */}
           <div className="trial-banner reveal">
             <div className="trial-banner-text">
               <div className="trial-badge-lbl">7 días gratis</div>
-              <p>Acceso completo al plan Esencial. Sin tarjeta de crédito. Cancela antes de los 7 días y no se cobra nada.</p>
+              <p>Acceso completo al plan Esencial. Se requiere tarjeta — cancela antes del día 8 y no se cobra nada.</p>
             </div>
             <Link to="/app/login" className="btn-trial">Comenzar gratis ahora</Link>
           </div>
@@ -516,8 +520,8 @@ export default function LandingPage() {
             <div className="price-card reveal">
               <div className="price-name">Esencial</div>
               <div className="price-desc">Todo lo que necesitas para transformar tu alimentación</div>
-              <div className="price-amount"><span className="price-currency">$</span><span className="price-number">29</span></div>
-              <div className="price-period">USD / mes</div>
+              <div className="price-amount"><span className="price-currency">$</span><span className="price-number">{mxNum(PLANS[0])}</span></div>
+              <div className="price-period">MXN / mes</div>
               <div className="price-divider" />
               <ul className="price-features">
                 <li>Coach KYŌRA disponible 24/7</li><li>Plan semanal personalizado con macros</li><li>Lista de compras automática</li><li>Descarga tu plan en PDF</li><li>Análisis semanal de tu progreso</li><li>Mi Despensa — cocina con lo que tienes</li>
@@ -528,8 +532,8 @@ export default function LandingPage() {
               <div className="price-badge">Más popular</div>
               <div className="price-name">Premium</div>
               <div className="price-desc">Nutrición, entrenamiento y familia — todo en un solo plan</div>
-              <div className="price-amount"><span className="price-currency">$</span><span className="price-number">49</span></div>
-              <div className="price-period">USD / mes</div>
+              <div className="price-amount"><span className="price-currency">$</span><span className="price-number">{mxNum(PLANS[1])}</span></div>
+              <div className="price-period">MXN / mes</div>
               <div className="price-divider" />
               <ul className="price-features">
                 <li>Todo lo del Esencial</li><li>Rutina de entrenamiento semanal adaptada a tu plan</li><li>Historial de tus últimas 8 semanas de planes</li><li>Plan familiar — hasta 2 perfiles adicionales</li><li>Acceso prioritario a nuevas funciones</li>
@@ -539,8 +543,8 @@ export default function LandingPage() {
             <div className="price-card reveal reveal-d2">
               <div className="price-name">Élite</div>
               <div className="price-desc">La precisión de la IA con respaldo humano certificado</div>
-              <div className="price-amount"><span className="price-currency">$</span><span className="price-number">99</span></div>
-              <div className="price-period">USD / mes</div>
+              <div className="price-amount"><span className="price-currency">$</span><span className="price-number">{mxNum(PLANS[2])}</span></div>
+              <div className="price-period">MXN / mes</div>
               <div className="price-divider" />
               <ul className="price-features">
                 <li>Todo lo del Premium</li><li>Videollamada mensual con nutriólogo certificado</li><li>Plan ajustado por un experto cada mes</li><li>Ideal si tienes condiciones de salud específicas</li><li>Atención prioritaria</li>
@@ -554,9 +558,9 @@ export default function LandingPage() {
         <section className="cta-section" id="start">
           <div className="cta-orb" />
           <h2 className="reveal">Tu mejor versión empieza<br />en tu <em>cocina</em></h2>
-          <p className="reveal">7 días gratis para comprobar lo que KYŌRA puede hacer por ti. Sin tarjeta. Sin riesgo.</p>
+          <p className="reveal">7 días gratis para comprobar lo que KYŌRA puede hacer por ti. Cancela antes del día 8 y no pagas nada.</p>
           <Link to="/app/login" className="btn-cta reveal">Empezar gratis · 7 días</Link>
-          <p className="cta-note reveal">Sin tarjeta de crédito requerida. Cancela cuando quieras.</p>
+          <p className="cta-note reveal">Se requiere tarjeta. Cancela antes del día 8 y no se cobra nada.</p>
         </section>
 
         {/* ── FOOTER ── */}

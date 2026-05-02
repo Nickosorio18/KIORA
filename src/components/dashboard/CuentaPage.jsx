@@ -628,7 +628,7 @@ export default function CuentaPage() {
             {currentPlan.label}
             {currentPlan.priceUSD > 0 && (
               <span style={{ fontWeight: 300, letterSpacing: 0 }}>
-                · ${currentPlan.priceUSD} USD / mes
+                · {currentPlan.priceLocal?.MX ?? `$${currentPlan.priceUSD} USD`} / mes
               </span>
             )}
           </div>
