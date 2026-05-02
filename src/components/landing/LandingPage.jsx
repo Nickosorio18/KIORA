@@ -158,16 +158,18 @@ const css = `
 .method-orb-1{top:-120px;right:-120px;width:500px;height:500px;background:radial-gradient(circle,rgba(200,169,110,.06) 0%,transparent 70%)}
 .method-orb-2{bottom:-150px;left:-100px;width:400px;height:400px;background:radial-gradient(circle,rgba(123,166,138,.04) 0%,transparent 70%);animation-delay:3.5s}
 .method-header{text-align:center;margin-bottom:5rem;position:relative;z-index:1}
-.method-header .section-desc{margin:0 auto}
-.method-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;max-width:1100px;margin:0 auto;position:relative;z-index:1}
-.method-card{background:rgba(255,255,255,.025);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid rgba(200,169,110,.1);border-radius:12px;padding:2rem 1.5rem;transition:all .4s cubic-bezier(.4,0,.2,1);cursor:default;position:relative;overflow:hidden}
-.method-card::after{content:'';position:absolute;inset:0;background:radial-gradient(circle at top left,rgba(200,169,110,.04) 0%,transparent 55%);opacity:0;transition:opacity .4s}
-.method-card:hover{background:rgba(255,255,255,.05);border-color:rgba(200,169,110,.22);box-shadow:0 0 40px rgba(200,169,110,.04),inset 0 1px 0 rgba(255,255,255,.06);transform:translateY(-4px)}
+.method-header .section-label{justify-content:center}
+.method-header .section-desc{margin:0 auto;color:rgba(255,255,255,.32)}
+.method-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1.2rem;max-width:1100px;margin:0 auto;position:relative;z-index:1}
+.method-card{background:rgba(255,255,255,.055);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid rgba(200,169,110,.18);border-top:1px solid rgba(200,169,110,.28);border-radius:12px;padding:2rem 1.5rem;transition:all .4s cubic-bezier(.4,0,.2,1);cursor:default;position:relative;overflow:hidden}
+.method-card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(to right,transparent,rgba(200,169,110,.35),transparent)}
+.method-card::after{content:'';position:absolute;inset:0;background:radial-gradient(circle at top left,rgba(200,169,110,.07) 0%,transparent 55%);opacity:0;transition:opacity .4s}
+.method-card:hover{background:rgba(255,255,255,.08);border-color:rgba(200,169,110,.32);box-shadow:0 8px 40px rgba(0,0,0,.2),0 0 0 1px rgba(200,169,110,.12);transform:translateY(-5px)}
 .method-card:hover::after{opacity:1}
-.method-num{font-family:var(--font-display);font-size:2.5rem;font-weight:400;color:rgba(200,169,110,.15);line-height:1;margin-bottom:1.2rem;transition:color .4s}
-.method-card:hover .method-num{color:rgba(200,169,110,.45)}
-.method-card h4{font-family:var(--font-display);font-size:1.08rem;font-weight:600;font-style:italic;color:var(--gold-light);margin-bottom:.5rem}
-.method-card p{font-size:.79rem;color:rgba(255,255,255,.3);line-height:1.62;font-weight:300}
+.method-num{font-family:var(--font-display);font-size:2.8rem;font-weight:400;color:rgba(200,169,110,.35);line-height:1;margin-bottom:1.2rem;transition:color .4s;letter-spacing:-.02em}
+.method-card:hover .method-num{color:rgba(200,169,110,.65)}
+.method-card h4{font-family:var(--font-display);font-size:1.08rem;font-weight:600;font-style:italic;color:var(--gold-light);margin-bottom:.6rem}
+.method-card p{font-size:.79rem;color:rgba(255,255,255,.45);line-height:1.65;font-weight:300}
 
 /* PRICING */
 .pricing{background:var(--white);padding:7rem 5%}
@@ -331,9 +333,9 @@ export default function LandingPage() {
                 <span className="hero-label-line" />
               </div>
               <h1>Nutrición que<br /><em>entiende quién eres</em></h1>
-              <p className="hero-sub">Tu agente de IA crea planes de nutrición y ejercicio adaptados a tu perfil real — y los ajusta cada semana según cómo avanza tu cuerpo.</p>
+              <p className="hero-sub">Tu agente de IA diseña tu plan de nutrición y ejercicio según quién eres — y lo ajusta cada semana con lo que vas aprendiendo de tu cuerpo.</p>
               <div className="hero-ctas">
-                <Link to="/app/login" className="btn-hp">Empezar gratis · 7 días</Link>
+                <Link to="/app/login" className="btn-hp">Empezar 7 días gratis</Link>
                 <a href="#method" className="btn-hg">Ver cómo funciona</a>
               </div>
             </div>
@@ -381,8 +383,7 @@ export default function LandingPage() {
         <div className="lp-stats reveal">
           <div className="lp-stat"><div className="lp-stat-num">24/7</div><div className="lp-stat-label">Tu coach, siempre disponible</div></div>
           <div className="lp-stat"><div className="lp-stat-num">&lt;2min</div><div className="lp-stat-label">De tu perfil a tu primer plan</div></div>
-          <div className="lp-stat"><div className="lp-stat-num">7 días</div><div className="lp-stat-label">De prueba gratis — cancela y no pagas</div></div>
-          <div className="lp-stat"><div className="lp-stat-num">$0</div><div className="lp-stat-label">Cobrado si cancelas antes del día 8</div></div>
+          <div className="lp-stat"><div className="lp-stat-num">7 días</div><div className="lp-stat-label">Prueba gratis — cancela cuando quieras</div></div>
         </div>
 
         {/* ── FEATURES ── */}
@@ -390,7 +391,7 @@ export default function LandingPage() {
           <div className="features-header">
             <div className="section-label reveal">Lo que KYŌRA hace por ti</div>
             <h2 className="section-title reveal">Tres cosas que ninguna app<br />de dieta <em>hace</em></h2>
-            <p className="section-desc reveal">Un agente que conoce tu cocina, calcula tus macros y se ajusta cuando tu cuerpo avanza. Todo sin que tengas que pensar demasiado.</p>
+            <p className="section-desc reveal">Un agente que conoce tu cocina, calcula tus macros y se adapta a cómo avanza tu cuerpo. Tú haces el trabajo real — él hace el resto.</p>
           </div>
           <div className="features-grid">
             <div className="feat-card reveal">
@@ -414,8 +415,8 @@ export default function LandingPage() {
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
               </div>
               <h3>Tu agente no te pierde de vista</h3>
-              <p>Tu agente de IA monitorea tu progreso 24/7 y ajusta tu plan para que cada semana sea mejor que la anterior.</p>
-              <ul className="feat-list"><li>Dashboard personal de progreso</li><li>Check-ins semanales con tu agente</li><li>Alertas inteligentes y motivación</li><li>Reportes mensuales detallados</li></ul>
+              <p>Tu agente sigue tu avance de cerca y ajusta el plan cada semana para que nunca te estanques.</p>
+              <ul className="feat-list"><li>Panel personal de progreso</li><li>Seguimiento semanal con tu agente</li><li>Recordatorios y mensajes de apoyo</li><li>Resumen mensual de tu avance</li></ul>
             </div>
           </div>
         </section>
@@ -486,10 +487,10 @@ export default function LandingPage() {
           </div>
           <div className="method-grid">
             {[
-              ["I",  "Evaluación", "Completas un análisis integral: hábitos, objetivos, historial médico y preferencias alimentarias."],
-              ["II", "Diseño",     "Tu agente de IA crea un plan personalizado de nutrición y ejercicio basado en tu perfil único."],
-              ["III","Acción",     "Sigues tu plan con guía constante, recetas detalladas y rutinas claras cada día."],
-              ["IV", "Evolución",  "Tu plan se mueve cuando tú te mueves. Lo que funcionó la semana pasada se ajusta para que esta semana sea mejor."],
+              ["I",  "Cuéntanos quién eres", "Completas un perfil rápido: tus hábitos, objetivos, preferencias y cómo responde tu cuerpo."],
+              ["II", "Tu plan en minutos",   "Tu agente crea un plan de nutrición y ejercicio desde cero, pensado solo para ti."],
+              ["III","Empieza hoy",          "Sigues tu plan con recetas claras, rutinas detalladas y tu agente disponible en cualquier momento."],
+              ["IV", "Mejora cada semana",   "Tu plan crece contigo. Cada semana aprende de la anterior y se vuelve más preciso."],
             ].map(([num, title, desc], i) => (
               <div key={num} className={`method-card reveal${i > 0 ? ` reveal-d${i}` : ""}`}>
                 <div className="method-num">{num}</div>
@@ -558,9 +559,9 @@ export default function LandingPage() {
         <section className="cta-section" id="start">
           <div className="cta-orb" />
           <h2 className="reveal">Tu mejor versión empieza<br />en tu <em>cocina</em></h2>
-          <p className="reveal">7 días gratis para comprobar lo que KYŌRA puede hacer por ti. Cancela antes del día 8 y no pagas nada.</p>
-          <Link to="/app/login" className="btn-cta reveal">Empezar gratis · 7 días</Link>
-          <p className="cta-note reveal">Se requiere tarjeta. Cancela antes del día 8 y no se cobra nada.</p>
+          <p className="reveal">En una semana tendrás un plan real, resultados que se notan y un agente que ya te conoce.</p>
+          <Link to="/app/login" className="btn-cta reveal">Empezar 7 días gratis</Link>
+          <p className="cta-note reveal">Se requiere tarjeta — cancela antes del día 8 sin costo.</p>
         </section>
 
         {/* ── FOOTER ── */}
