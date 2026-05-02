@@ -557,9 +557,9 @@ export default function LandingPage() {
         <section className="cta-section" id="start">
           <div className="cta-orb" />
           <h2 className="reveal">Tu mejor versión empieza<br />en tu <em>cocina</em></h2>
-          <p className="reveal">7 días gratis para comprobar lo que KYŌRA puede hacer por ti. Cancela antes del día 8 y no pagas nada.</p>
-          <Link to="/app/login" className="btn-cta reveal">Empezar gratis · 7 días</Link>
-          <p className="cta-note reveal">Se requiere tarjeta. Cancela antes del día 8 y no se cobra nada.</p>
+          <p className="reveal">En una semana tendrás un plan real, resultados que se notan y un agente que ya te conoce.</p>
+          <Link to="/app/login" className="btn-cta reveal">Empezar 7 días gratis</Link>
+          <p className="cta-note reveal">Se requiere tarjeta — cancela antes del día 8 sin costo.</p>
         </section>
 
         {/* ── FOOTER ── */}
