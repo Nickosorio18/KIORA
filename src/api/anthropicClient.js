@@ -146,6 +146,7 @@ export async function streamMessage({
   const decoder = new TextDecoder();
   let fullText = "";
   let buffer = "";
+  let stopReason = null;
 
   while (true) {
     const { done, value } = await reader.read();
@@ -174,6 +175,11 @@ export async function streamMessage({
         onToken(text);
       }
 
+      // Capture stop_reason for getReplyMeta callers (e.g. generateWeeklyPlan)
+      if (event.type === "message_delta" && event.delta?.stop_reason) {
+        stopReason = event.delta.stop_reason;
+      }
+
       // Handle API errors in stream
       if (event.type === "error") {
         throw new Error(event.error?.message || "Error en stream de la API");
@@ -182,5 +188,11 @@ export async function streamMessage({
   }
 
   if (!fullText) throw new Error("La API no devolvió contenido de texto");
+
+  METADATA_STORE.set(fullText, { stopReason, usage: null });
+  if (METADATA_STORE.size > MAX_METADATA_ENTRIES) {
+    METADATA_STORE.delete(METADATA_STORE.keys().next().value);
+  }
+
   return fullText;
 }

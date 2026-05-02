@@ -1,4 +1,4 @@
-import { sendMessage, getReplyMeta } from "@api/anthropicClient";
+import { streamMessage, getReplyMeta } from "@api/anthropicClient";
 import { modelForPlan, planMeets, FEATURES } from "@config/plans";
 import { localDateISO } from "@utils/date";
 
@@ -270,9 +270,10 @@ export async function generateWeeklyPlan({ profile, pantry, weekStartDate, planI
   // Sonnet 4 soporta hasta 64k de salida, así que somos generosos.
   const maxTokens = includeExercise ? 24000 : 16000;
 
-  const reply = await sendMessage({
+  const reply = await streamMessage({
     systemPrompt: prompt,
     messages: [{ role: "user", content: "Genera mi plan semanal ahora, siguiendo el schema al pie de la letra." }],
+    onToken: () => {},
     model,
     maxTokens,
     signal,
