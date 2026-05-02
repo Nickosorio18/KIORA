@@ -490,11 +490,21 @@ const styles = `
   .k-logo{font-size:0;letter-spacing:0}
   .k-logo .ac{font-size:0}
   .k-badge{display:none}
-  .k-msgs{padding:12px}
+  .k-msgs{padding:12px;flex:1;min-height:0}
   .msg{max-width:90%}
   .k-input{padding:10px 12px 12px}
   .k-qas{grid-template-columns:1fr}
-  .k-suggestions{grid-template-columns:1fr}
+  /* Suggestions: scroll horizontal para no tapar el historial */
+  .k-suggestions{
+    display:flex;flex-direction:row;flex-wrap:nowrap;
+    overflow-x:auto;gap:8px;padding:8px 12px 0;
+    scrollbar-width:none;-webkit-overflow-scrolling:touch;
+  }
+  .k-suggestions::-webkit-scrollbar{display:none}
+  .k-suggestions .k-qa{
+    flex-shrink:0;width:200px;padding:10px 12px;
+  }
+  .k-suggestions-label{padding:8px 12px 4px}
   .k-toast{bottom:86px}
   .k-toast.visible{bottom:86px}
   .k-panel{width:100%;max-width:100%;border-left:none;border-top:1px solid var(--border)}

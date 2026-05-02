@@ -53,6 +53,7 @@ const styles = `
 .prg-bar{width:100%;border-radius:3px 3px 0 0;background:rgba(200,169,110,.18);transition:height .5s cubic-bezier(.22,1,.36,1);min-height:3px}
 .prg-bar.filled{background:var(--gold)}
 .prg-bar.today{background:var(--charcoal)}
+.prg-bar.future{background:rgba(200,169,110,.07);min-height:0;height:0!important}
 .prg-bar-day{font-size:.55rem;font-weight:400;color:var(--text-light);letter-spacing:.05em;text-transform:uppercase}
 .prg-bar-day.today{color:var(--charcoal);font-weight:600}
 
@@ -307,7 +308,7 @@ export default function ProgressPage() {
         {/* ── Semana en vistazo ── */}
         <div className="prg-section">
           <div className="prg-section-title">Semana en vistazo</div>
-          <div className="prg-section-sub">Últimos 7 días — calorías consumidas y días de actividad</div>
+          <div className="prg-section-sub">Esta semana — calorías consumidas y días de actividad</div>
         </div>
 
         <div className="prg-charts">
@@ -324,7 +325,7 @@ export default function ProgressPage() {
                   <div key={d.date} className="prg-bar-wrap">
                     <div className="prg-bar-track">
                       <div
-                        className={`prg-bar${d.isToday ? " today" : d.cal > 0 ? " filled" : ""}`}
+                        className={`prg-bar${d.isToday ? " today" : d.isFuture ? " future" : d.cal > 0 ? " filled" : ""}`}
                         style={{ height: `${h}%` }}
                       />
                     </div>
@@ -344,7 +345,7 @@ export default function ProgressPage() {
             <div className="prg-dots-row">
               {weekExerciseProgress.map((d) => (
                 <div key={d.date} className="prg-dot-wrap">
-                  <div className={`prg-dot-circle${d.count > 0 ? " active" : d.isToday ? " today-inactive" : ""}`}>
+                  <div className={`prg-dot-circle${d.count > 0 && !d.isFuture ? " active" : d.isToday ? " today-inactive" : ""}`}>
                     {d.count > 0 && (
                       <Ico size={12} d={<><polyline points="20 6 9 17 4 12"/></>} />
                     )}

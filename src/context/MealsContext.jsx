@@ -132,21 +132,26 @@ export function MealsProvider({ children }) {
     };
   }, [todaysMeals]);
 
-  // ── Derived: week progress (last 7 days) ──
+  // ── Derived: week progress (current week Sun–Sat) ──
 
   const weekProgress = useMemo(() => {
     const days = ["Dom", "Lun", "Mar", "Mié", "Jue", "Vie", "Sáb"];
     const result = [];
-    const now = new Date(todayStr);
+    // Parse as LOCAL midnight to avoid UTC getDay() mismatch in UTC-6 timezones
+    const [y, mo, day] = todayStr.split("-").map(Number);
+    const today = new Date(y, mo - 1, day);
+    // Rewind to Sunday of current week
+    const sunday = new Date(today);
+    sunday.setDate(today.getDate() - today.getDay());
 
-    for (let i = 6; i >= 0; i--) {
-      const d = new Date(now);
-      d.setDate(d.getDate() - i);
-      const dateStr = d.toISOString().slice(0, 10);
+    for (let i = 0; i < 7; i++) {
+      const d = new Date(sunday);
+      d.setDate(sunday.getDate() + i);
+      const dateStr = localDateISO(d);
       const dayMeals = meals.filter((m) => m.date === dateStr && m.done);
       const cal = dayMeals.reduce((s, m) => s + (m.calories || 0), 0);
       const isToday = dateStr === todayStr;
-      const isFuture = false;
+      const isFuture = dateStr > todayStr;
       result.push({
         day: days[d.getDay()],
         date: dateStr,
@@ -162,14 +167,15 @@ export function MealsProvider({ children }) {
 
   const streak = useMemo(() => {
     let count = 0;
-    const d = new Date(todayStr);
+    const [y, mo, day] = todayStr.split("-").map(Number);
+    const d = new Date(y, mo - 1, day);
     const hasTodayDone = meals.some((m) => m.date === todayStr && m.done);
     if (!hasTodayDone) {
       d.setDate(d.getDate() - 1);
     }
 
     for (let i = 0; i < 365; i++) {
-      const dateStr = d.toISOString().slice(0, 10);
+      const dateStr = localDateISO(d);
       const hasDone = meals.some((m) => m.date === dateStr && m.done);
       if (!hasDone) break;
       count++;

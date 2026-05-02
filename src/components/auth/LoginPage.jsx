@@ -395,11 +395,13 @@ const styles = `
   .lgn-panel-quote { font-size: 1.9rem; }
 }
 @media (max-width: 640px) {
-  .lgn { flex-direction: column; }
+  .lgn { flex-direction: column; min-height: 100svh; }
   .lgn-panel {
     width: 100%;
-    min-height: auto;
-    padding: 2rem 1.5rem 1.8rem;
+    height: auto;
+    min-height: 0;
+    flex-shrink: 0;
+    padding: 1.25rem 1.5rem;
     flex-direction: row;
     align-items: center;
     gap: 1rem;
@@ -407,11 +409,12 @@ const styles = `
   .lgn-ring { display: none; }
   .lgn-panel-body { display: none; }
   .lgn-panel-foot { display: none; }
-  .lgn-panel-top { margin-bottom: 0; }
-  .lgn-panel-logo { font-size: 1.1rem; }
-  .lgn-right-head { padding: 1rem 1.5rem; }
-  .lgn-content { padding: 1.5rem 1.5rem 2.5rem; }
-  .lgn-title { font-size: 1.8rem; }
+  .lgn-panel-top { margin-bottom: 0; flex: 1; }
+  .lgn-panel-logo { font-size: 1rem; }
+  .lgn-right { flex: 1; overflow-y: auto; }
+  .lgn-right-head { padding: .75rem 1.25rem; }
+  .lgn-content { padding: 1.25rem 1.5rem 2rem; }
+  .lgn-title { font-size: 1.6rem; }
 }
 `;
 

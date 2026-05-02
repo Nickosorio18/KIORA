@@ -252,6 +252,12 @@ const css = `
   .modal-grid-2,.modal-grid-3{grid-template-columns:1fr}
   .right-col{flex-direction:column!important}
   .right-col>*{min-width:0!important;flex:none!important;width:100%}
+  .week-card{padding:1rem}
+  .week-dual{height:80px;gap:.25rem}
+  .week-dual-tracks{gap:1px}
+  .week-bar-day{font-size:.52rem}
+  .week-legend{gap:.6rem}
+  .week-legend-item{font-size:.52rem}
 }
 @media(max-width:400px){
   .stats-row{grid-template-columns:1fr}
@@ -692,14 +698,14 @@ export default function KyoraDashboard() {
                       <div className="week-dual-tracks">
                         <div className="week-dual-track">
                           <div
-                            className={`week-dual-fill ${d.isToday ? "today-n" : d.cal > 0 ? "nutrition" : "empty"}`}
-                            style={{ height: `${d.cal === 0 && !d.isToday ? 4 : Math.min(100, nH)}%` }}
+                            className={`week-dual-fill ${d.isToday ? "today-n" : d.isFuture ? "empty" : d.cal > 0 ? "nutrition" : "empty"}`}
+                            style={{ height: `${d.isFuture ? 4 : d.cal === 0 && !d.isToday ? 4 : Math.min(100, nH)}%` }}
                           />
                         </div>
                         <div className="week-dual-track">
                           <div
-                            className={`week-dual-fill ${d.isToday ? "today-e" : exDay?.count > 0 ? "exercise" : "empty"}`}
-                            style={{ height: `${exDay?.count === 0 && !d.isToday ? 4 : Math.min(100, eH)}%` }}
+                            className={`week-dual-fill ${d.isToday ? "today-e" : d.isFuture ? "empty" : exDay?.count > 0 ? "exercise" : "empty"}`}
+                            style={{ height: `${d.isFuture ? 4 : exDay?.count === 0 && !d.isToday ? 4 : Math.min(100, eH)}%` }}
                           />
                         </div>
                       </div>

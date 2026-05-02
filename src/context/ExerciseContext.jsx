@@ -146,11 +146,15 @@ export function ExerciseProvider({ children }) {
   const weekExerciseProgress = useMemo(() => {
     const days = ["Dom", "Lun", "Mar", "Mié", "Jue", "Vie", "Sáb"];
     const result = [];
-    const now = new Date(todayStr);
-    for (let i = 6; i >= 0; i--) {
-      const d = new Date(now);
-      d.setDate(d.getDate() - i);
-      const dateStr = d.toISOString().slice(0, 10);
+    const [y, mo, day] = todayStr.split("-").map(Number);
+    const today = new Date(y, mo - 1, day);
+    const sunday = new Date(today);
+    sunday.setDate(today.getDate() - today.getDay());
+
+    for (let i = 0; i < 7; i++) {
+      const d = new Date(sunday);
+      d.setDate(sunday.getDate() + i);
+      const dateStr = localDateISO(d);
       const dayExercises = exercises.filter((e) => e.date === dateStr && e.done);
       const count = dayExercises.length;
       result.push({
@@ -158,6 +162,7 @@ export function ExerciseProvider({ children }) {
         date: dateStr,
         count,
         isToday: dateStr === todayStr,
+        isFuture: dateStr > todayStr,
       });
     }
     return result;
@@ -167,11 +172,12 @@ export function ExerciseProvider({ children }) {
 
   const exerciseStreak = useMemo(() => {
     let count = 0;
-    const d = new Date(todayStr);
+    const [y, mo, day] = todayStr.split("-").map(Number);
+    const d = new Date(y, mo - 1, day);
     const hasTodayDone = exercises.some((e) => e.date === todayStr && e.done);
     if (!hasTodayDone) d.setDate(d.getDate() - 1);
     for (let i = 0; i < 365; i++) {
-      const dateStr = d.toISOString().slice(0, 10);
+      const dateStr = localDateISO(d);
       const hasDone = exercises.some((e) => e.date === dateStr && e.done);
       if (!hasDone) break;
       count++;
