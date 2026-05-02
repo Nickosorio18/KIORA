@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, useCallback } from "react";
+import { useState, useRef, useEffect, useCallback, useMemo } from "react";
 import { useActiveProfile } from "@hooks/useActiveProfile";
 import { usePantry } from "@context/PantryContext";
 import { useMeals } from "@context/MealsContext";
@@ -7,6 +7,7 @@ import { useWeeklyPlan } from "@context/WeeklyPlanContext";
 import { buildSystemPrompt } from "@api/agentPrompt";
 import { streamMessage as streamAnthropicMessage } from "@api/anthropicClient";
 import { useAgentHistory } from "@hooks/useAgentHistory";
+import { useMidnightRefresh } from "@hooks/useMidnightRefresh";
 import { extractMeals } from "@utils/parseMeals";
 import { extractExercises } from "@utils/parseExercises";
 import { generatePlanPDF } from "@utils/generatePlanPDF";
@@ -609,10 +610,57 @@ export default function KyoraAgent() {
   // Despensa solo para contexto del agente (sistem prompt + conteo en hint).
   // El CRUD vive en /app/pantry del sidebar, no aquí.
   const { asObject: pantry, totalCount, LOCATIONS: PANTRY_LOCATIONS } = usePantry();
-  // Plan semanal: usado para informar al agente si el usuario ya tiene plan activo
-  // hoy — así evita incluir bloques kyora-meals en preguntas informativas de recetas.
   const { isCurrentWeek, currentPlan } = useWeeklyPlan();
-  const hasTodayPlan = isCurrentWeek && !!currentPlan;
+  const todayStr = useMidnightRefresh();
+
+  // Build today's plan context for the agent system prompt.
+  // Includes meals, exercises, macro targets and progress so the agent
+  // can answer "what should I eat today" without asking the user to repeat info.
+  const todayContext = useMemo(() => {
+    if (!isCurrentWeek || !currentPlan) return null;
+
+    const dayEntry = (currentPlan.days || []).find((d) => d.date === todayStr);
+    if (!dayEntry) return null;
+
+    const exEntry = (currentPlan.exerciseRoutine || []).find((d) => d.date === todayStr);
+    const doneMealsSet = new Set(currentPlan.doneMealIds || []);
+    const doneExSet = new Set(currentPlan.doneExerciseIds || []);
+
+    const meals = (dayEntry.meals || []).map((m) => ({
+      label: m.label,
+      name: m.name,
+      time: m.time || "",
+      calories: m.calories || 0,
+      protein: m.protein || 0,
+      done: doneMealsSet.has(m.id),
+    }));
+
+    const exercises = (exEntry?.exercises || []).map((e) => ({
+      name: e.name,
+      sets: e.sets || 0,
+      reps: e.reps || 0,
+      weight: e.weight || 0,
+      duration: e.duration || 0,
+      type: e.type || "strength",
+      muscle: e.muscle || "",
+      done: doneExSet.has(e.id),
+    }));
+
+    const doneMeals = meals.filter((m) => m.done);
+    const doneCalories = doneMeals.reduce((s, m) => s + m.calories, 0);
+    const doneProtein = doneMeals.reduce((s, m) => s + m.protein, 0);
+
+    return {
+      date: todayStr,
+      meals,
+      exercises,
+      macroTargets: currentPlan.profileSnapshot || null,
+      doneCalories,
+      doneProtein,
+    };
+  }, [isCurrentWeek, currentPlan, todayStr]);
+
+  const hasTodayPlan = !!todayContext;
   const { addMeal } = useMeals();
   const { addExercise } = useExercise();
   const { messages, setMessages, clearHistory } = useAgentHistory();
@@ -689,7 +737,8 @@ export default function KyoraAgent() {
           pantry,
           PANTRY_LOCATIONS,
           { id: plan.id, messagesUsed: usage.count },
-          { hasActivePlanToday: hasTodayPlan }
+          { hasActivePlanToday: hasTodayPlan },
+          todayContext
         ),
         messages: next.filter((m) => m.role !== "error"),
         model: plan.modelFor(taskType),
