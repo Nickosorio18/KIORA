@@ -139,7 +139,10 @@ KYŌRA tiene tiers de suscripción. Conocer el tier del usuario te permite entre
 {USER_PROFILE}
 
 ## Despensa del Usuario
-{USER_PANTRY}`;
+{USER_PANTRY}
+
+## Plan de Hoy
+{TODAY_PLAN}`;
 
 // ── Plan copy per-tier ──────────────────────────────────
 
@@ -205,6 +208,79 @@ ${caps}${upgrades}
 **Orientación interna (NO la menciones al usuario):** ${p.coaching}`;
 }
 
+// ── Day names in Spanish ────────────────────────────────
+const DAY_NAMES = ["domingo", "lunes", "martes", "miércoles", "jueves", "viernes", "sábado"];
+const MONTH_NAMES = ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"];
+
+/**
+ * Builds the "Plan de Hoy" section injected into the system prompt.
+ * @param {object|null} todayContext
+ *   {
+ *     date: string,             // "2026-05-02"
+ *     meals: Array,             // [{label, name, time, calories, protein, done}]
+ *     exercises: Array,         // [{name, sets, reps, weight, duration, type, muscle, done}]
+ *     macroTargets: object,     // {caloriesTarget, proteinTarget, objetivo}
+ *     doneCalories: number,
+ *     doneProtein: number,
+ *   }
+ */
+function buildTodayPlanSection(todayContext) {
+  if (!todayContext || !todayContext.date) {
+    return "El usuario no tiene un plan semanal activo para hoy. Puedes sugerirle que lo genere desde la pestaña Mi Semana.";
+  }
+
+  const { date, meals, exercises, macroTargets, doneCalories, doneProtein } = todayContext;
+
+  // Format date label: "martes 2 de mayo"
+  const d = new Date(date + "T12:00:00");
+  const dayLabel = `${DAY_NAMES[d.getDay()]} ${d.getDate()} de ${MONTH_NAMES[d.getMonth()]}`;
+
+  let out = `El usuario tiene un plan activo para hoy (${dayLabel}).\n`;
+
+  if (macroTargets) {
+    const { caloriesTarget, proteinTarget, objetivo } = macroTargets;
+    out += `**Meta del día:** ${caloriesTarget ? `${caloriesTarget} kcal` : "—"} · ${proteinTarget ? `${proteinTarget}g proteína` : "—"}`;
+    if (objetivo) out += ` | Objetivo: ${objetivo}`;
+    out += "\n";
+  }
+
+  if (meals.length > 0) {
+    out += "\n**Comidas programadas:**\n";
+    meals.forEach((m) => {
+      const check = m.done ? "✓" : "○";
+      const macros = [m.calories ? `${m.calories} kcal` : null, m.protein ? `${m.protein}g prot` : null].filter(Boolean).join(" · ");
+      out += `${check} ${m.label} — ${m.name}${m.time ? ` (${m.time})` : ""}${macros ? ` — ${macros}` : ""}\n`;
+    });
+
+    // Progress summary
+    const totalCal = macroTargets?.caloriesTarget || 0;
+    const totalProt = macroTargets?.proteinTarget || 0;
+    const calPct = totalCal ? Math.round((doneCalories / totalCal) * 100) : null;
+    const protPct = totalProt ? Math.round((doneProtein / totalProt) * 100) : null;
+
+    out += "\n**Progreso del día:**";
+    if (totalCal) out += ` ${doneCalories} / ${totalCal} kcal (${calPct}%)`;
+    if (totalProt) out += ` · ${doneProtein} / ${totalProt}g proteína (${protPct}%)`;
+    if (!totalCal && !totalProt) out += ` ${doneCalories} kcal · ${doneProtein}g proteína consumidas`;
+    out += "\n";
+  } else {
+    out += "\nNo hay comidas registradas en el plan para hoy.\n";
+  }
+
+  if (exercises.length > 0) {
+    out += "\n**Ejercicios programados:**\n";
+    exercises.forEach((e) => {
+      const check = e.done ? "✓" : "○";
+      const detail = e.duration
+        ? `${e.duration} min`
+        : [e.sets && `${e.sets}x${e.reps}`, e.weight && `${e.weight}kg`].filter(Boolean).join(" ");
+      out += `${check} ${e.name}${detail ? ` — ${detail}` : ""}${e.muscle ? ` (${e.muscle})` : ""}\n`;
+    });
+  }
+
+  return out.trim();
+}
+
 /**
  * Construye el system prompt final inyectando perfil, despensa y plan del usuario.
  *
@@ -216,9 +292,11 @@ ${caps}${upgrades}
  *   { id: "esencial"|"premium"|"elite" }
  * @param {object} [activePlanSummary] - Estado del plan semanal activo
  *   { hasActivePlanToday: boolean } — true si el usuario tiene plan para esta semana
+ * @param {object} [todayContext] - Datos del día actual del plan semanal
+ *   { date, meals, exercises, macroTargets, doneCalories, doneProtein }
  * @returns {string} System prompt listo para enviar a Claude.
  */
-export function buildSystemPrompt(profile, pantryObj, locationMeta = [], planContext = null, activePlanSummary = null) {
+export function buildSystemPrompt(profile, pantryObj, locationMeta = [], planContext = null, activePlanSummary = null, todayContext = null) {
   const profileStr = profile
     ? `Nombre: ${profile.nombre}
 Edad: ${profile.edad}
@@ -250,9 +328,12 @@ Preferencias: ${profile.preferencias}`
     ? "IMPORTANTE — el usuario ya tiene un plan semanal activo y personalizado para esta semana. Para preguntas informativas como '¿qué puedo cocinar?', '¿qué receta me das?' o '¿qué hago con lo que tengo?', NO incluyas el bloque kyora-meals: el usuario ya tiene su nutrición planificada. Incluye el bloque ÚNICAMENTE si el usuario explícitamente pide 'agregar', 'registrar' o 'añadir' algo extra a su seguimiento del día."
     : "Inclúyelo siempre que sugieras comidas concretas con nombres definidos.";
 
+  const todayPlanStr = buildTodayPlanSection(todayContext);
+
   return KYORA_SYSTEM_PROMPT
     .replace("{USER_PROFILE}", profileStr)
     .replace("{USER_PANTRY}", pantryStr)
     .replace("{USER_PLAN}", planStr)
-    .replace("{ACTIVE_PLAN_MEALS_RULE}", activePlanMealsRule);
+    .replace("{ACTIVE_PLAN_MEALS_RULE}", activePlanMealsRule)
+    .replace("{TODAY_PLAN}", todayPlanStr);
 }
