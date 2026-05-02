@@ -487,10 +487,10 @@ export default function LandingPage() {
           </div>
           <div className="method-grid">
             {[
-              ["I",  "Evaluación", "Completas un perfil rápido: tus hábitos, objetivos, preferencias y cómo responde tu cuerpo."],
-              ["II", "Diseño",     "Tu agente crea un plan de nutrición y ejercicio desde cero, pensado solo para ti."],
-              ["III","Acción",     "Sigues tu plan con recetas claras, rutinas detalladas y tu agente disponible en cualquier momento."],
-              ["IV", "Evolución",  "Tu plan crece contigo. Cada semana aprende de la anterior y se vuelve más preciso."],
+              ["I",  "Cuéntanos quién eres", "Completas un perfil rápido: tus hábitos, objetivos, preferencias y cómo responde tu cuerpo."],
+              ["II", "Tu plan en minutos",   "Tu agente crea un plan de nutrición y ejercicio desde cero, pensado solo para ti."],
+              ["III","Empieza hoy",          "Sigues tu plan con recetas claras, rutinas detalladas y tu agente disponible en cualquier momento."],
+              ["IV", "Mejora cada semana",   "Tu plan crece contigo. Cada semana aprende de la anterior y se vuelve más preciso."],
             ].map(([num, title, desc], i) => (
               <div key={num} className={`method-card reveal${i > 0 ? ` reveal-d${i}` : ""}`}>
                 <div className="method-num">{num}</div>
