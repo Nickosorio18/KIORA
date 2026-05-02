@@ -158,16 +158,18 @@ const css = `
 .method-orb-1{top:-120px;right:-120px;width:500px;height:500px;background:radial-gradient(circle,rgba(200,169,110,.06) 0%,transparent 70%)}
 .method-orb-2{bottom:-150px;left:-100px;width:400px;height:400px;background:radial-gradient(circle,rgba(123,166,138,.04) 0%,transparent 70%);animation-delay:3.5s}
 .method-header{text-align:center;margin-bottom:5rem;position:relative;z-index:1}
-.method-header .section-desc{margin:0 auto}
-.method-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;max-width:1100px;margin:0 auto;position:relative;z-index:1}
-.method-card{background:rgba(255,255,255,.025);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid rgba(200,169,110,.1);border-radius:12px;padding:2rem 1.5rem;transition:all .4s cubic-bezier(.4,0,.2,1);cursor:default;position:relative;overflow:hidden}
-.method-card::after{content:'';position:absolute;inset:0;background:radial-gradient(circle at top left,rgba(200,169,110,.04) 0%,transparent 55%);opacity:0;transition:opacity .4s}
-.method-card:hover{background:rgba(255,255,255,.05);border-color:rgba(200,169,110,.22);box-shadow:0 0 40px rgba(200,169,110,.04),inset 0 1px 0 rgba(255,255,255,.06);transform:translateY(-4px)}
+.method-header .section-label{justify-content:center}
+.method-header .section-desc{margin:0 auto;color:rgba(255,255,255,.32)}
+.method-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1.2rem;max-width:1100px;margin:0 auto;position:relative;z-index:1}
+.method-card{background:rgba(255,255,255,.055);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid rgba(200,169,110,.18);border-top:1px solid rgba(200,169,110,.28);border-radius:12px;padding:2rem 1.5rem;transition:all .4s cubic-bezier(.4,0,.2,1);cursor:default;position:relative;overflow:hidden}
+.method-card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(to right,transparent,rgba(200,169,110,.35),transparent)}
+.method-card::after{content:'';position:absolute;inset:0;background:radial-gradient(circle at top left,rgba(200,169,110,.07) 0%,transparent 55%);opacity:0;transition:opacity .4s}
+.method-card:hover{background:rgba(255,255,255,.08);border-color:rgba(200,169,110,.32);box-shadow:0 8px 40px rgba(0,0,0,.2),0 0 0 1px rgba(200,169,110,.12);transform:translateY(-5px)}
 .method-card:hover::after{opacity:1}
-.method-num{font-family:var(--font-display);font-size:2.5rem;font-weight:400;color:rgba(200,169,110,.15);line-height:1;margin-bottom:1.2rem;transition:color .4s}
-.method-card:hover .method-num{color:rgba(200,169,110,.45)}
-.method-card h4{font-family:var(--font-display);font-size:1.08rem;font-weight:600;font-style:italic;color:var(--gold-light);margin-bottom:.5rem}
-.method-card p{font-size:.79rem;color:rgba(255,255,255,.3);line-height:1.62;font-weight:300}
+.method-num{font-family:var(--font-display);font-size:2.8rem;font-weight:400;color:rgba(200,169,110,.35);line-height:1;margin-bottom:1.2rem;transition:color .4s;letter-spacing:-.02em}
+.method-card:hover .method-num{color:rgba(200,169,110,.65)}
+.method-card h4{font-family:var(--font-display);font-size:1.08rem;font-weight:600;font-style:italic;color:var(--gold-light);margin-bottom:.6rem}
+.method-card p{font-size:.79rem;color:rgba(255,255,255,.45);line-height:1.65;font-weight:300}
 
 /* PRICING */
 .pricing{background:var(--white);padding:7rem 5%}
@@ -485,10 +487,10 @@ export default function LandingPage() {
           </div>
           <div className="method-grid">
             {[
-              ["I",  "Evaluación", "Completas un análisis integral: hábitos, objetivos, historial médico y preferencias alimentarias."],
-              ["II", "Diseño",     "Tu agente de IA crea un plan personalizado de nutrición y ejercicio basado en tu perfil único."],
-              ["III","Acción",     "Sigues tu plan con guía constante, recetas detalladas y rutinas claras cada día."],
-              ["IV", "Evolución",  "Tu plan se mueve cuando tú te mueves. Lo que funcionó la semana pasada se ajusta para que esta semana sea mejor."],
+              ["I",  "Evaluación", "Completas un perfil rápido: tus hábitos, objetivos, preferencias y cómo responde tu cuerpo."],
+              ["II", "Diseño",     "Tu agente crea un plan de nutrición y ejercicio desde cero, pensado solo para ti."],
+              ["III","Acción",     "Sigues tu plan con recetas claras, rutinas detalladas y tu agente disponible en cualquier momento."],
+              ["IV", "Evolución",  "Tu plan crece contigo. Cada semana aprende de la anterior y se vuelve más preciso."],
             ].map(([num, title, desc], i) => (
               <div key={num} className={`method-card reveal${i > 0 ? ` reveal-d${i}` : ""}`}>
                 <div className="method-num">{num}</div>
