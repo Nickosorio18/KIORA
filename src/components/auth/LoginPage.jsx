@@ -415,6 +415,9 @@ const styles = `
   .lgn-right-head { padding: .75rem 1.25rem; }
   .lgn-content { padding: 1.25rem 1.5rem 2rem; }
   .lgn-title { font-size: 1.6rem; }
+  /* Prevent iOS auto-zoom: inputs must be ≥ 16px */
+  .lgn-input { font-size: 16px; }
+  .lgn-input[type="password"] { font-size: 16px; letter-spacing: 4px; }
 }
 `;
 
