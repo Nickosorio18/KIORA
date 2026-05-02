@@ -16,14 +16,22 @@ export function AuthProvider({ children }) {
 
   // ── Listen to auth state changes ──
   useEffect(() => {
-    // Get initial session
-    supabase.auth.getSession().then(({ data: { session: s } }) => {
+    supabase.auth.getSession().then(async ({ data: { session: s } }) => {
+      // If remember=false and this is a fresh browser open (no sessionStorage flag),
+      // sign the user out so the session doesn't persist across browser restarts.
+      if (s && localStorage.getItem('kyora_remember') === 'false' &&
+          !sessionStorage.getItem('kyora_session_alive')) {
+        await supabase.auth.signOut();
+        setSession(null);
+        setUser(null);
+        setLoading(false);
+        return;
+      }
       setSession(s);
       setUser(s?.user ?? null);
       setLoading(false);
     });
 
-    // Subscribe to changes (login, logout, token refresh)
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       (_event, s) => {
         setSession(s);

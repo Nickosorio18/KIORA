@@ -17,35 +17,13 @@ if (!supabaseUrl || !supabaseAnonKey) {
   )
 }
 
-// Custom storage: respects the "Recordarme" preference set at login.
-// When remember=true (default): localStorage → persists across browser restarts.
-// When remember=false: sessionStorage → cleared when tab/browser closes.
-const rememberStorage = {
-  getItem: (key) => {
-    const remember = localStorage.getItem('kyora_remember') !== 'false';
-    return remember ? localStorage.getItem(key) : sessionStorage.getItem(key);
-  },
-  setItem: (key, value) => {
-    const remember = localStorage.getItem('kyora_remember') !== 'false';
-    if (remember) {
-      localStorage.setItem(key, value);
-      sessionStorage.removeItem(key);
-    } else {
-      sessionStorage.setItem(key, value);
-      localStorage.removeItem(key);
-    }
-  },
-  removeItem: (key) => {
-    localStorage.removeItem(key);
-    sessionStorage.removeItem(key);
-  },
-};
-
+// Session always persists in localStorage (most reliable).
+// The "Recordarme" preference is stored separately: if false, AuthContext
+// signs the user out on fresh browser open (detected via sessionStorage flag).
 export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
   auth: {
     autoRefreshToken: true,
     persistSession: true,
     detectSessionInUrl: true,
-    storage: rememberStorage,
   },
 })

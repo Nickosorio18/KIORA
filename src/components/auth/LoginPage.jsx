@@ -466,7 +466,6 @@ export default function LoginPage() {
       return;
     }
 
-    // Store remember preference before signIn so custom storage uses correct backend
     localStorage.setItem('kyora_remember', remember ? 'true' : 'false');
 
     // Login
@@ -476,6 +475,10 @@ export default function LoginPage() {
       setError("Correo o contraseña incorrectos.");
       return;
     }
+
+    // Mark session as alive in sessionStorage so AuthContext knows
+    // this is an active session (not a stale one from a closed browser).
+    sessionStorage.setItem('kyora_session_alive', '1');
     navigate("/app/dashboard");
   }
 
