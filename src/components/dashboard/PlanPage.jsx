@@ -241,14 +241,52 @@ const css = `
 
 /* Responsive */
 @media(max-width:640px){
-  .pl-wrap{padding:1.5rem 1rem 3rem}
-  .pl-title{font-size:1.65rem}
-  .pl-target{grid-template-columns:repeat(2,1fr)}
+  .pl-wrap{padding:1.2rem .9rem 4rem}
+  .pl-title{font-size:1.5rem}
+  .pl-sub{font-size:.84rem}
+  .pl-target{grid-template-columns:repeat(2,1fr);gap:.5rem;padding:.7rem}
+  .pl-target-val{font-size:1rem}
   .pl-meal-macros{display:none}
-  .pl-meta{flex-direction:column;align-items:stretch}
-  .pl-meta-actions{justify-content:flex-start}
+  .pl-meta{flex-direction:column;align-items:stretch;gap:.6rem}
+  .pl-meta-actions{justify-content:flex-start;flex-wrap:wrap}
+  .pl-act-btn{font-size:.62rem;padding:.45rem .75rem}
   .pl-sample-cta{width:100%}
+  .pl-sample-banner{padding:.8rem 1rem;gap:.6rem}
+  .pl-sample-text{min-width:0}
   .pl-history-lock{flex-direction:column;align-items:flex-start}
+  /* Empty state */
+  .pl-empty{padding:2rem 1.2rem}
+  .pl-empty-title{font-size:1.1rem}
+  .pl-empty-body{font-size:.82rem;max-width:100%}
+  .pl-empty-bullets{grid-template-columns:1fr}
+  .pl-generate-btn{width:100%;justify-content:center}
+  /* Loading state */
+  .pl-loading{padding:2rem 1.2rem;min-height:260px}
+  .pl-loading-title{font-size:1rem}
+  /* Plan card */
+  .pl-card{padding:1rem .9rem}
+  .pl-plan-title{font-size:1.2rem}
+  .pl-tab{min-width:64px;padding:.5rem .25rem}
+  .pl-tab-date{display:none}
+  .pl-tab.shopping{min-width:88px}
+  .pl-day-totals{gap:.6rem;padding:.65rem .8rem}
+  .pl-day-stat{font-size:.75rem}
+  .pl-section{margin-top:1.2rem}
+  /* Meals */
+  .pl-meal-head{gap:.6rem;padding:.75rem .8rem}
+  .pl-meal-label{min-width:52px;font-size:.52rem}
+  .pl-meal-name{font-size:.9rem}
+  .pl-meal-ing{grid-template-columns:1fr}
+  .pl-meal-body{padding:0 .8rem .9rem}
+  /* Exercises */
+  .pl-ex{padding:.7rem .8rem;gap:.6rem}
+  .pl-ex-name{font-size:.85rem}
+  /* Shopping */
+  .pl-shop-list{grid-template-columns:1fr}
+  /* History */
+  .pl-history-lock-text{min-width:0}
+  .pl-archive-card{padding:.8rem 1rem}
+  .pl-archive-actions{flex-wrap:wrap}
 }
 `;
 
