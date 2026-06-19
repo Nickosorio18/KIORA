@@ -1,5 +1,6 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
 import { Helmet } from 'react-helmet-async'
+import { SpeedInsights } from '@vercel/speed-insights/react'
 import { AuthProvider, useAuth } from '@context/AuthContext'
 import { PantryProvider } from '@context/PantryContext'
 import { UserProvider } from '@context/UserContext'
@@ -93,6 +94,7 @@ function App() {
                 <Route path="/app/*" element={<Navigate to="/app/dashboard" replace />} />
               </Routes>
             </Router>
+            <SpeedInsights />
           </WeeklyPlanProvider>
           </ExerciseProvider>
           </MealsProvider>
